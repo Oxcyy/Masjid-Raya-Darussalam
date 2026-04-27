@@ -31,7 +31,7 @@ Website dibangun menggunakan **PHP native**, **MySQL** sebagai database, **Boots
 
 ### Halaman Publik
 - **Beranda** — Hero section dinamis, statistik, galeri foto, video YouTube, dan ulasan terbaru
-- **Jadwal Sholat** — Tampil real-time menggunakan Vue.js 3 dengan countdown waktu sholat berikutnya
+- **Jadwal Sholat** — Tampil real-time via API aladhan.com menggunakan Vue.js 3, lengkap dengan countdown waktu sholat berikutnya dan fallback data lokal Samarinda
 - **Detail & Fasilitas** — Profil lengkap masjid beserta daftar fasilitas dengan foto
 - **Galeri Foto** — Tampilan grid interaktif dengan lightbox
 - **Ulasan Jamaah** — Form kirim ulasan dengan rating bintang (1-5) dan filter ulasan reaktif
@@ -45,11 +45,12 @@ Website dibangun menggunakan **PHP native**, **MySQL** sebagai database, **Boots
 - **Floating Admin Bar** — Akses cepat ke dashboard saat melihat tampilan publik
 
 ### Keamanan
-- Password di-hash menggunakan `password_hash()` (bcrypt)
-- Semua query menggunakan PDO Prepared Statement, aman dari SQL Injection
-- CSRF Token Protection pada setiap form
-- Validasi MIME type untuk upload foto
-- Session auto-expire (1 jam) + regenerate ID saat login
+- Password admin dicek menggunakan `password_hash()` (bcrypt)
+- Semua query database menggunakan PDO Prepared Statement, aman dari SQL Injection
+- CSRF Token Protection pada setiap form admin
+- Validasi MIME type nyata untuk upload foto (bukan hanya ekstensi)
+- Session auto-expire 1 jam + regenerate ID saat login
+- Folder uploads dilindungi `.htaccess` agar tidak bisa diakses langsung
 
 ---
 
@@ -62,6 +63,7 @@ Website dibangun menggunakan **PHP native**, **MySQL** sebagai database, **Boots
 | JavaScript | Vue.js 3 (CDN), Vanilla JS (Fetch API) |
 | Database | MySQL / MariaDB |
 | Server | Apache + mod_rewrite (Laragon) |
+| API Eksternal | aladhan.com (jadwal sholat) |
 
 ---
 
@@ -72,31 +74,32 @@ masjid/
 ├── index.php                   # Halaman Beranda
 ├── .htaccess                   # Routing & keamanan Apache
 ├── api/                        # REST API endpoint (JSON)
-│   ├── auth.php
-│   ├── reviews.php
-│   ├── facilities.php
-│   ├── gallery.php
-│   └── video.php
+│   ├── auth.php                # Login & logout admin
+│   ├── reviews.php             # CRUD ulasan
+│   ├── facilities.php          # CRUD fasilitas
+│   ├── gallery.php             # CRUD galeri foto
+│   └── video.php               # CRUD video YouTube
 ├── assets/
-│   ├── css/style.css
+│   ├── css/style.css           # Stylesheet utama
 │   └── js/
-│       ├── controller.js
+│       ├── controller.js       # Logic frontend
 │       ├── vue-prayer.js       # Komponen Vue jadwal sholat
 │       └── vue-reviews.js      # Komponen Vue form & list ulasan
 ├── includes/
-│   └── config.php              # Konfigurasi DB & helper
+│   └── config.php              # Konfigurasi DB, session, helper
 ├── views/
-│   ├── detail.php
-│   ├── ulasan.php
-│   ├── login.php
+│   ├── detail.php              # Halaman detail & fasilitas
+│   ├── ulasan.php              # Halaman ulasan
+│   ├── login.php               # Halaman login admin
 │   └── admin/
 │       ├── dashboard.php
 │       ├── kelola_fasilitas.php
 │       ├── kelola_galeri.php
 │       ├── kelola_ulasan.php
+│       ├── kelola_video.php
 │       ├── _sidebar.php
 │       └── _footer.php
-└── uploads/
+└── uploads/                    # File foto yang diupload
     ├── facilities/
     ├── gallery/
     └── reviews/
