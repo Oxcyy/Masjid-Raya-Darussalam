@@ -44,14 +44,6 @@ Website dibangun menggunakan **PHP native**, **MySQL** sebagai database, **Boots
 - **Kelola Galeri & Video** — Manajemen foto galeri dan embed YouTube dalam satu halaman
 - **Floating Admin Bar** — Akses cepat ke dashboard saat melihat tampilan publik
 
-### Keamanan
-- Password admin dicek menggunakan `password_hash()` (bcrypt)
-- Semua query database menggunakan PDO Prepared Statement, aman dari SQL Injection
-- CSRF Token Protection pada setiap form admin
-- Validasi MIME type nyata untuk upload foto (bukan hanya ekstensi)
-- Session auto-expire 1 jam + regenerate ID saat login
-- Folder uploads dilindungi `.htaccess` agar tidak bisa diakses langsung
-
 ---
 
 ## Teknologi yang Digunakan
