@@ -71,26 +71,26 @@ Website dibangun menggunakan **PHP native**, **MySQL** sebagai database, **Boots
 
 ```
 masjid/
-├── index.php                   # Halaman Beranda
-├── .htaccess                   # Routing & keamanan Apache
-├── api/                        # REST API endpoint (JSON)
-│   ├── auth.php                # Login & logout admin
-│   ├── reviews.php             # CRUD ulasan
-│   ├── facilities.php          # CRUD fasilitas
-│   ├── gallery.php             # CRUD galeri foto
-│   └── video.php               # CRUD video YouTube
+├── index.php                   
+├── .htaccess                   
+├── api/                       
+│   ├── auth.php                
+│   ├── reviews.php             
+│   ├── facilities.php          
+│   ├── gallery.php             
+│   └── video.php            
 ├── assets/
-│   ├── css/style.css           # Stylesheet utama
+│   ├── css/style.css           
 │   └── js/
-│       ├── controller.js       # Logic frontend
-│       ├── vue-prayer.js       # Komponen Vue jadwal sholat
-│       └── vue-reviews.js      # Komponen Vue form & list ulasan
+│       ├── controller.js       
+│       ├── vue-prayer.js       
+│       └── vue-reviews.js      
 ├── includes/
-│   └── config.php              # Konfigurasi DB, session, helper
+│   └── config.php              
 ├── views/
-│   ├── detail.php              # Halaman detail & fasilitas
-│   ├── ulasan.php              # Halaman ulasan
-│   ├── login.php               # Halaman login admin
+│   ├── detail.php              
+│   ├── ulasan.php             
+│   ├── login.php               
 │   └── admin/
 │       ├── dashboard.php
 │       ├── kelola_fasilitas.php
@@ -99,7 +99,7 @@ masjid/
 │       ├── kelola_video.php
 │       ├── _sidebar.php
 │       └── _footer.php
-└── uploads/                    # File foto yang diupload
+└── uploads/                    
     ├── facilities/
     ├── gallery/
     └── reviews/
@@ -107,33 +107,3 @@ masjid/
 
 ---
 
-## Cara Menjalankan
-
-**1. Clone repositori**
-```bash
-git clone https://github.com/Oxcyy/Masjid-Raya-Darussalam.git
-```
-
-**2. Pindahkan ke folder server**
-```
-Salin folder ke: C:/laragon/www/
-```
-
-**3. Buat database**
-```sql
-CREATE DATABASE masjidraya CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
-**4. Konfigurasi koneksi** — edit `includes/config.php`
-```php
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'masjidraya');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-```
-
-**5. Akses aplikasi**
-```
-http://localhost/masjid/                  -> Halaman Publik
-http://localhost/masjid/views/login.php   -> Login Admin
-```
