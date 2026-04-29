@@ -6,7 +6,7 @@ Website profil dan wisata religi Masjid Raya Darussalam Samarinda, Kalimantan Ti
 
 ## Tim Pengembang
 
-**Kelompok 7 Hara Hetta** — Sistem Informasi C 2024  
+**Kelompok 7 Hara Hetta** - Sistem Informasi C 2024  
 Mata Kuliah: Pemrograman Berbasis Web
 
 | No | Nama | NIM | GitHub |
@@ -53,7 +53,7 @@ Website dibangun menggunakan **PHP native**, **MySQL** sebagai database, **Boots
 | Backend | PHP 8.0+, PDO MySQL |
 | Frontend | Bootstrap 5.3, Font Awesome 6.5 |
 | JavaScript | Vue.js 3 (CDN), Vanilla JS (Fetch API) |
-| Database | MySQL / MariaDB |
+| Database | MySQL |
 | Server | Apache + mod_rewrite (Laragon) |
 | API Eksternal | aladhan.com (jadwal sholat) |
 
@@ -64,7 +64,6 @@ Website dibangun menggunakan **PHP native**, **MySQL** sebagai database, **Boots
 ```
 masjid/
 ├── index.php                   
-├── .htaccess                   
 ├── api/                       
 │   ├── auth.php                
 │   ├── reviews.php             
@@ -91,6 +90,7 @@ masjid/
 │       ├── kelola_video.php
 │       ├── _sidebar.php
 │       └── _footer.php
+│       └── aksi_edit.php
 └── uploads/                    
     ├── facilities/
     ├── gallery/
@@ -98,4 +98,46 @@ masjid/
 ```
 
 ---
+## Dokumentasi Website
+
+### Tampilan Website Publik
+
+- Beranda Utama
+<img width="1381" height="7013" alt="beranda utama" src="https://github.com/user-attachments/assets/1e1ecb19-038a-4250-a834-93b29c3be592" />
+
+---
+
+- Detail & Fasilitas
+<img width="1381" height="7010" alt="detail   fasilitas" src="https://github.com/user-attachments/assets/4cc92ca1-9ffb-4fa7-8ed8-34a45ce3abd7" />
+
+---
+
+- Ulasan
+<img width="1381" height="6586" alt="ulasan" src="https://github.com/user-attachments/assets/43c661ce-a55a-400e-8f1d-2ae5aa20b224" />
+
+---
+
+## Tampilan Halaman Admin
+- Halaman Dashboard Admin
+<img width="1919" height="969" alt="Screenshot 2026-04-29 224909" src="https://github.com/user-attachments/assets/e6f508f1-a184-45e7-a8eb-9a1aac4bf27f" />
+
+---
+
+- Kelola Ulasan
+<img width="1919" height="969" alt="image" src="https://github.com/user-attachments/assets/31dbaed0-2b73-4c5c-974e-3b62321568b4" />
+<img width="1919" height="969" alt="image" src="https://github.com/user-attachments/assets/8639008c-5002-44f6-b6a2-924af2b9d618" />
+<img width="1918" height="969" alt="image" src="https://github.com/user-attachments/assets/f96db8b1-7377-4eae-b57d-9f2f1e05c2ba" />
+
+---
+
+- Kelola Fasilitas
+<img width="1919" height="972" alt="image" src="https://github.com/user-attachments/assets/b9bb594e-a222-4bd0-8e8a-f6f8c5266f1e" />
+
+---
+
+- Kelola Galeri & Video
+<img width="1919" height="967" alt="image" src="https://github.com/user-attachments/assets/10f12044-20c5-496d-a9c6-273438a41c88" />
+<img width="1919" height="971" alt="image" src="https://github.com/user-attachments/assets/c141113e-133a-4a0e-af26-6add1e45db3d" />
+
+
 
