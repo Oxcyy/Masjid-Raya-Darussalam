@@ -7,7 +7,7 @@ Website profil dan wisata religi Masjid Raya Darussalam Samarinda, Kalimantan Ti
 ## Tim Pengembang
 
 **Kelompok 7 Hara Hetta** — Sistem Informasi C 2024  
-Mata Kuliah: Pemrograman Aplikasi Bergerak
+Mata Kuliah: Pemrograman Berbasis Web
 
 | No | Nama | NIM | GitHub |
 |----|------|-----|--------|
