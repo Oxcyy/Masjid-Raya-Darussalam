@@ -70,6 +70,7 @@ if (!$id) { header('Location: kelola_ulasan.php'); exit; }
                 <input type="radio" id="e-star1" name="e_rating" value="1"><label for="e-star1" title="1 Bintang (Buruk)"><i class="fa-solid fa-star"></i></label>
               </div>
               <div id="e-rating-label" style="font-size:.78rem;color:var(--gray-400);margin-top:.25rem;min-height:1.2em;font-style:italic">Luar Biasa!</div>
+              <div id="e-rating-error" style="color:#dc2626;font-size:.75rem;margin-top:.2rem;display:none"><i class="fa-solid fa-circle-exclamation"></i> <span class="msg"></span></div>
             </div>
 
             <div style="margin-bottom:.85rem">
@@ -77,6 +78,7 @@ if (!$id) { header('Location: kelola_ulasan.php'); exit; }
                 <i class="fa-solid fa-user"></i> Nama Lengkap <span class="field-required">*</span>
               </label>
               <input type="text" id="e-name" class="field-input" maxlength="15" required>
+              <div id="e-name-error" style="color:#dc2626;font-size:.75rem;margin-top:.2rem;display:none"><i class="fa-solid fa-circle-exclamation"></i> <span class="msg"></span></div>
             </div>
 
             <div class="row g-3 mb-3">
@@ -85,6 +87,7 @@ if (!$id) { header('Location: kelola_ulasan.php'); exit; }
                   <i class="fa-solid fa-location-dot"></i> Asal Kota
                 </label>
                 <input type="text" id="e-kota" class="field-input" maxlength="20">
+                <div id="e-kota-error" style="color:#dc2626;font-size:.75rem;margin-top:.2rem;display:none"><i class="fa-solid fa-circle-exclamation"></i> <span class="msg"></span></div>
               </div>
               <div class="col-md-6">
                 <label class="field-label" for="e-status"><i class="fa-solid fa-circle-dot"></i> Status</label>
@@ -97,12 +100,13 @@ if (!$id) { header('Location: kelola_ulasan.php'); exit; }
 
             <div style="margin-bottom:.85rem">
               <label class="field-label" for="e-text">
-                <i class="fa-regular fa-comment-dots"></i> Teks Ulasan
+                <i class="fa-regular fa-comment-dots"></i> Teks Ulasan <span class="field-required">*</span>
               </label>
               <textarea id="e-text" class="field-textarea" rows="4" style="resize:vertical" maxlength="500"></textarea>
               <div id="e-text-count" style="font-size:.72rem;color:var(--gray-400);margin-top:.25rem;text-align:right">
                 0 / 500 karakter
               </div>
+              <div id="e-text-error" style="color:#dc2626;font-size:.75rem;margin-top:.2rem;display:none"><i class="fa-solid fa-circle-exclamation"></i> <span class="msg"></span></div>
             </div>
 
             <div class="mb-4">

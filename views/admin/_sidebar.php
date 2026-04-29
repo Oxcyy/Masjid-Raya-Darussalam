@@ -17,8 +17,8 @@ $adminUsername = $_SESSION['admin_username'] ?? 'admin';
 
   <div class="sidebar-section-label">Halaman Publik</div>
   <a href="../../index.php" class="sidebar-link"><i class="fa-solid fa-house"></i> Beranda</a>
-  <a href="../detail.php" class="sidebar-link"><i class="fa-solid fa-mosque"></i> Detail &amp; Fasilitas</a>
-  <a href="../ulasan.php" class="sidebar-link"><i class="fa-regular fa-comment-dots"></i> Halaman Ulasan</a>
+  <a href="../../views/detail.php" class="sidebar-link"><i class="fa-solid fa-mosque"></i> Detail &amp; Fasilitas</a>
+  <a href="../../views/ulasan.php" class="sidebar-link"><i class="fa-regular fa-comment-dots"></i> Halaman Ulasan</a>
 
   <div class="sidebar-bottom">
     <div class="sidebar-user" style="text-align:center; margin-bottom:.65rem;">

@@ -176,6 +176,9 @@ const MasjidCtrl = (() => {
   };
 
   const AdminUlasan = {
+    allReviewsData: [],
+    pendingReviewsData: [],
+
     async init() {
       this.bindTabs();
       await this.loadPending();
@@ -200,41 +203,98 @@ const MasjidCtrl = (() => {
         });
       });
     },
-    _reviewRow(r, index, isPending = false) {
-      const photoCell = (r.photo_url && r.photo_url.trim()) ? `<img src="${r.photo_url}" style="width:48px;height:36px;object-fit:cover;border-radius:4px;border:1px solid var(--gray-200);cursor:pointer" onclick="window._ctrl.previewPhoto('${r.photo_url.replace(/'/g,"\\'")}','${r.name.replace(/'/g,"\\'")}')">` : '<span style="color:var(--gray-300);font-size:.78rem">-</span>';
+    _reviewRow(r, index, isPending = false, total = 0, sortVal = 'newest') {
+      const displayIndex = sortVal === 'oldest' ? (index + 1) : (total - index);
+      const photoCell = (r.photo_url && r.photo_url.trim()) ? `<img src="${r.photo_url}" style="width:48px;height:36px;object-fit:cover;border-radius:4px;border:1px solid var(--gray-200);cursor:pointer;margin:0 auto" onclick="window._ctrl.previewPhoto('${r.photo_url.replace(/'/g,"\\'")}','${r.name.replace(/'/g,"\\'")}')">` : '<span style="color:var(--gray-300);font-size:.78rem">-</span>';
       const statusBadge = `<span class="badge-${r.status === 'approved' ? 'approved' : 'pending'}">${r.status === 'approved' ? 'Disetujui' : 'Menunggu'}</span>`;
       const fromTab = isPending ? 'pending' : 'semua';
       
       let actions = `<a class="act-btn act-edit me-1" href="aksi_edit.php?id=${r.id}&from=${fromTab}"><i class="fa-solid fa-pen"></i></a>
-                     <button class="act-btn act-delete" onclick="window._ctrl.confirmDelete(${r.id},'review')"><i class="fa-solid fa-trash"></i></button>`;
+                    <button class="act-btn act-delete" onclick="window._ctrl.confirmDelete(${r.id},'review')"><i class="fa-solid fa-trash"></i></button>`;
       
-      if (isPending) actions = `<button class="act-btn act-approve me-1" onclick="window._ctrl.approve(${r.id})"><i class="fa-solid fa-check"></i> Approve</button>` + actions;
-      
-      return `<tr>
-          <td>${index + 1}</td><td><strong>${r.name}</strong><br><small style="color:var(--gray-400)">${r.kota}</small></td>
+      if (isPending) {
+        actions = `<button class="act-btn act-approve me-1" onclick="window._ctrl.approve(${r.id})"><i class="fa-solid fa-check"></i> Approve</button>` + actions;
+        return `<tr>
+          <td>${displayIndex}</td><td><strong>${r.name}</strong><br><small style="color:var(--gray-400)">${r.kota}</small></td>
           <td><div style="display:flex;gap:2px">${Utils.stars(r.rating)}</div></td>
-          <td style="max-width:180px; white-space:normal; overflow-wrap:anywhere; word-break:break-word;">${r.text.slice(0, 70)}...</td><td>${photoCell}</td>
-          <td>${isPending ? r.date_fmt : statusBadge}</td><td style="white-space:nowrap">${actions}</td>
+          <td style="max-width:180px; white-space:normal; overflow-wrap:anywhere; word-break:break-word;">${r.text.slice(0, 70)}...</td>
+          <td style="text-align:center">${photoCell}</td>
+          <td>${r.date_fmt}</td><td style="white-space:nowrap">${actions}</td>
         </tr>`;
+      } else {
+        return `<tr>
+          <td>${displayIndex}</td><td><strong>${r.name}</strong><br><small style="color:var(--gray-400)">${r.kota}</small></td>
+          <td><div style="display:flex;gap:2px">${Utils.stars(r.rating)}</div></td>
+          <td style="max-width:180px; white-space:normal; overflow-wrap:anywhere; word-break:break-word;">${r.text.slice(0, 70)}...</td>
+          <td style="text-align:center">${photoCell}</td>
+          <td>${r.date_fmt}</td>
+          <td>${statusBadge}</td><td style="white-space:nowrap">${actions}</td>
+        </tr>`;
+      }
     },
     async loadPending() {
       const tbody = document.getElementById('pending-tbody'); if (!tbody) return;
       tbody.innerHTML = '<tr><td colspan="7" class="text-center" style="padding:2rem;color:var(--gray-400)"><i class="fa-solid fa-spinner fa-spin"></i> Memuat...</td></tr>';
       const res = await Utils.get('reviews.php', { action: 'pending' });
       if (res.success) {
-        tbody.innerHTML = res.data.length ? res.data.map((r, index) => this._reviewRow(r, index, true)).join('') : '<tr><td colspan="7" class="text-center" style="padding:2rem;color:var(--gray-400)">Tidak ada ulasan pending.</td></tr>';
-        const badge = document.getElementById('ku-pending-badge');
-        if (badge) { badge.textContent = res.data.length; badge.style.display = res.data.length ? 'inline-block' : 'none'; }
+        this.pendingReviewsData = res.data;
+        this.renderPendingTable();
       }
+    },
+    renderPendingTable() {
+      const tbody = document.getElementById('pending-tbody'); if (!tbody) return;
+      const sortVal = document.getElementById('sort-pending')?.value || 'newest';
+      const starVal = document.getElementById('filter-star-pending')?.value || 'all';
+      
+      let data = [...this.pendingReviewsData];
+
+      if (starVal !== 'all') {
+        data = data.filter(r => parseInt(r.rating) === parseInt(starVal));
+      }
+
+      if (sortVal === 'oldest') data.reverse();
+      
+      const total = data.length;
+      tbody.innerHTML = total ? data.map((r, index) => this._reviewRow(r, index, true, total, sortVal)).join('') : '<tr><td colspan="7" class="text-center" style="padding:2rem;color:var(--gray-400)">Tidak ada ulasan sesuai filter.</td></tr>';
+      
+      const badge = document.getElementById('ku-pending-badge');
+      if (badge) { badge.textContent = this.pendingReviewsData.length; badge.style.display = this.pendingReviewsData.length ? 'inline-block' : 'none'; }
     },
     async loadAll() {
       const tbody = document.getElementById('all-tbody'); if (!tbody) return;
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center" style="padding:2rem;color:var(--gray-400)"><i class="fa-solid fa-spinner fa-spin"></i> Memuat...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center" style="padding:2rem;color:var(--gray-400)"><i class="fa-solid fa-spinner fa-spin"></i> Memuat...</td></tr>';
       const res = await Utils.get('reviews.php', { action: 'all' });
-      if (res.success) { tbody.innerHTML = res.data.length ? res.data.map((r, index) => this._reviewRow(r, index, false)).join('') : '<tr><td colspan="7" class="text-center" style="padding:2rem;color:var(--gray-400)">Belum ada ulasan.</td></tr>'; }
+      if (res.success) { 
+        this.allReviewsData = res.data;
+        this.renderAllTable();
+      }
+    },
+    renderAllTable() {
+      const tbody = document.getElementById('all-tbody'); if (!tbody) return;
+      const sortVal = document.getElementById('sort-all')?.value || 'newest';
+      const starVal = document.getElementById('filter-star-all')?.value || 'all';
+      
+      let data = [...this.allReviewsData];
+
+      if (starVal !== 'all') {
+        data = data.filter(r => parseInt(r.rating) === parseInt(starVal));
+      }
+
+      if (sortVal === 'oldest') data.reverse();
+      
+      const total = data.length;
+      tbody.innerHTML = total ? data.map((r, index) => this._reviewRow(r, index, false, total, sortVal)).join('') : '<tr><td colspan="8" class="text-center" style="padding:2rem;color:var(--gray-400)">Tidak ada ulasan sesuai filter.</td></tr>';
     },
     bindForm() {
       const form = document.getElementById('tambah-form'); if (!form) return;
+
+      const tName = document.getElementById('t-name');
+      const tKota = document.getElementById('t-kota');
+      const blockEmoji = (e) => {
+        e.target.value = e.target.value.replace(/\p{Extended_Pictographic}/gu, '');
+      };
+      if(tName) tName.addEventListener('input', blockEmoji);
+      if(tKota) tKota.addEventListener('input', blockEmoji);
 
       const tText = document.getElementById('t-text');
       const tTextCount = document.getElementById('t-text-count');
@@ -255,17 +315,66 @@ const MasjidCtrl = (() => {
 
       form.addEventListener('submit', async e => {
         e.preventDefault();
+
+        let isValid = true;
+        const tName = document.getElementById('t-name');
+        const tKota = document.getElementById('t-kota');
+        const tText = document.getElementById('t-text');
+        const ratingVal = document.querySelector('input[name="t_rating"]:checked')?.value;
+
+        const errName = document.getElementById('t-name-error');
+        const errKota = document.getElementById('t-kota-error');
+        const errText = document.getElementById('t-text-error');
+        const errRating = document.getElementById('t-rating-error');
+
+        tName.classList.remove('is-invalid');
+        tKota.classList.remove('is-invalid');
+        tText.classList.remove('is-invalid');
+        if(errName) errName.style.display = 'none';
+        if(errKota) errKota.style.display = 'none';
+        if(errText) errText.style.display = 'none';
+        if(errRating) errRating.style.display = 'none';
+
+        if (!ratingVal) {
+          isValid = false;
+          if(errRating) { errRating.style.display = 'block'; errRating.querySelector('.msg').textContent = 'Pilih rating bintang terlebih dahulu'; }
+        }
+
+        const nameVal = tName.value.trim();
+        if (!nameVal) {
+          isValid = false; tName.classList.add('is-invalid');
+          if(errName) { errName.style.display = 'block'; errName.querySelector('.msg').textContent = 'Nama lengkap wajib diisi'; }
+        } else if (nameVal.length < 5 || nameVal.length > 15) {
+          isValid = false; tName.classList.add('is-invalid');
+          if(errName) { errName.style.display = 'block'; errName.querySelector('.msg').textContent = 'Nama harus 5-15 karakter'; }
+        }
+
+        const kotaVal = tKota.value.trim();
+        if (kotaVal && kotaVal.length > 20) {
+          isValid = false; tKota.classList.add('is-invalid');
+          if(errKota) { errKota.style.display = 'block'; errKota.querySelector('.msg').textContent = 'Asal kota maksimal 20 karakter'; }
+        }
+
+        const textVal = tText.value.trim();
+        if (!textVal) {
+          isValid = false; tText.classList.add('is-invalid');
+          if(errText) { errText.style.display = 'block'; errText.querySelector('.msg').textContent = 'Ceritakan pengalaman Anda'; }
+        } else if (textVal.length < 10 || textVal.length > 500) {
+          isValid = false; tText.classList.add('is-invalid');
+          if(errText) { errText.style.display = 'block'; errText.querySelector('.msg').textContent = 'Ulasan harus 10-500 karakter'; }
+        }
+
+        if (!isValid) return;
+
         const btn = document.getElementById('tambah-submit-btn'); 
         btn.disabled = true; 
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengirim...';
         
         const fd = new FormData();
         fd.append('action', 'add'); 
-        fd.append('name', document.getElementById('t-name').value); 
-        fd.append('kota', document.getElementById('t-kota').value);
-        fd.append('text', document.getElementById('t-text').value); 
-        
-        const ratingVal = document.querySelector('input[name="t_rating"]:checked')?.value || 5;
+        fd.append('name', nameVal); 
+        fd.append('kota', kotaVal);
+        fd.append('text', textVal); 
         fd.append('rating', ratingVal);
         
         const file = document.getElementById('t-photo').files[0]; 
@@ -281,13 +390,9 @@ const MasjidCtrl = (() => {
             document.getElementById('t-photo-wrap').style.display = 'none'; 
             document.getElementById('t-photo-dropzone').style.display = 'block'; 
             
-            if (typeof this.loadAll === 'function') {
-                await this.loadAll(); 
-                const btnSemua = document.querySelector('.ku-nav-btn[data-tab="semua"]');
-                if(btnSemua) btnSemua.click(); 
-            } else {
-                setTimeout(() => window.location.href = 'kelola_ulasan.php', 800);
-            }
+            await this.loadAll(); 
+            const btnSemua = document.querySelector('.ku-nav-btn[data-tab="semua"]');
+            if(btnSemua) btnSemua.click(); 
         }
         btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Kirim Ulasan';
       });
@@ -338,9 +443,21 @@ const MasjidCtrl = (() => {
       if (!res.success) { if (notFound) notFound.style.display = 'flex'; return; }
       if (formEl) formEl.style.display = 'block';
 
-      const r = res.data;
-      Utils.el('e-id').value = id; Utils.el('e-name').value = r.name; Utils.el('e-kota').value = r.kota; Utils.el('e-text').value = r.text; Utils.el('e-status').value = r.status; 
+const r = res.data;
+      Utils.el('e-id').value = id; 
+      Utils.el('e-name').value = r.name; 
+      Utils.el('e-kota').value = r.kota; 
+      Utils.el('e-text').value = r.text; 
+      Utils.el('e-status').value = r.status; 
       
+      const eName = document.getElementById('e-name');
+      const eKota = document.getElementById('e-kota');
+      const blockEmoji = (e) => {
+        e.target.value = e.target.value.replace(/\p{Extended_Pictographic}/gu, '');
+      };
+      if(eName) eName.addEventListener('input', blockEmoji);
+      if(eKota) eKota.addEventListener('input', blockEmoji);
+
       const eText = document.getElementById('e-text');
       const eTextCount = document.getElementById('e-text-count');
       if (eTextCount) eTextCount.textContent = `${r.text.length} / 500 karakter`;
@@ -349,7 +466,6 @@ const MasjidCtrl = (() => {
               eTextCount.textContent = `${eText.value.length} / 500 karakter`;
           });
       }
-
       const labels = { 5:'Luar Biasa!', 4:'Bagus', 3:'Cukup', 2:'Kurang', 1:'Buruk' };
       const ratingRadio = document.querySelector(`input[name="e_rating"][value="${r.rating}"]`);
       if (ratingRadio) ratingRadio.checked = true;
@@ -393,15 +509,64 @@ const MasjidCtrl = (() => {
 
       Utils.el('edit-form')?.addEventListener('submit', async e => {
         e.preventDefault();
+
+        let isValid = true;
+        const eName = document.getElementById('e-name');
+        const eKota = document.getElementById('e-kota');
+        const eText = document.getElementById('e-text');
+        const ratingVal = document.querySelector('input[name="e_rating"]:checked')?.value;
+
+        const errName = document.getElementById('e-name-error');
+        const errKota = document.getElementById('e-kota-error');
+        const errText = document.getElementById('e-text-error');
+        const errRating = document.getElementById('e-rating-error');
+
+        eName.classList.remove('is-invalid');
+        eKota.classList.remove('is-invalid');
+        eText.classList.remove('is-invalid');
+        if(errName) errName.style.display = 'none';
+        if(errKota) errKota.style.display = 'none';
+        if(errText) errText.style.display = 'none';
+        if(errRating) errRating.style.display = 'none';
+
+        if (!ratingVal) {
+          isValid = false;
+          if(errRating) { errRating.style.display = 'block'; errRating.querySelector('.msg').textContent = 'Pilih rating bintang terlebih dahulu'; }
+        }
+
+        const nameVal = eName.value.trim();
+        if (!nameVal) {
+          isValid = false; eName.classList.add('is-invalid');
+          if(errName) { errName.style.display = 'block'; errName.querySelector('.msg').textContent = 'Nama lengkap wajib diisi'; }
+        } else if (nameVal.length < 5 || nameVal.length > 15) {
+          isValid = false; eName.classList.add('is-invalid');
+          if(errName) { errName.style.display = 'block'; errName.querySelector('.msg').textContent = 'Nama harus 5-15 karakter'; }
+        }
+
+        const kotaVal = eKota.value.trim();
+        if (kotaVal && kotaVal.length > 20) {
+          isValid = false; eKota.classList.add('is-invalid');
+          if(errKota) { errKota.style.display = 'block'; errKota.querySelector('.msg').textContent = 'Asal kota maksimal 20 karakter'; }
+        }
+
+        const textVal = eText.value.trim();
+        if (!textVal) {
+          isValid = false; eText.classList.add('is-invalid');
+          if(errText) { errText.style.display = 'block'; errText.querySelector('.msg').textContent = 'Teks ulasan wajib diisi'; }
+        } else if (textVal.length < 10 || textVal.length > 500) {
+          isValid = false; eText.classList.add('is-invalid');
+          if(errText) { errText.style.display = 'block'; errText.querySelector('.msg').textContent = 'Ulasan harus 10-500 karakter'; }
+        }
+
+        if (!isValid) return;
+
         const fd = new FormData();
         fd.append('action', 'edit'); fd.append('id', id);
-        fd.append('name',   Utils.el('e-name').value);
-        fd.append('kota',   Utils.el('e-kota').value);
-        fd.append('text',   Utils.el('e-text').value);
+        fd.append('name',   nameVal);
+        fd.append('kota',   kotaVal);
+        fd.append('text',   textVal);
         fd.append('status', Utils.el('e-status').value);
-        
-        const ratingVal = document.querySelector('input[name="e_rating"]:checked')?.value || 5;
-        fd.append('rating', ratingVal);
+        fd.append('rating', ratingVal || 5);
         
         const file = Utils.el('e-photo')?.files[0];
         if (file) fd.append('photo', file);
@@ -843,6 +1008,8 @@ const MasjidCtrl = (() => {
 
   window._ctrl = window._ctrl || {};
   Object.assign(window._ctrl, {
+    sortPending   : () => AdminUlasan.renderPendingTable(),
+    sortAll       : () => AdminUlasan.renderAllTable(),
     approve       : id      => AdminActions.approve(id),
     confirmDelete : (id, t) => AdminActions.confirmDelete(id, t),
     doDelete      : async () => {

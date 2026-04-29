@@ -1,4 +1,4 @@
-const { createApp, ref, computed, onMounted } = Vue;
+const { createApp, ref, computed, onMounted, watch } = Vue;
 
 function getApiBase() {
   if (window.APP_BASE) return window.APP_BASE.replace(/\/$/, '') + '/api/';
@@ -72,6 +72,13 @@ function initListApp(mountSelector) {
       const submitMsg    = ref('');
       const errors       = ref({});
 
+      watch(name, (newVal) => {
+        name.value = newVal.replace(/\p{Extended_Pictographic}/gu, '');
+      });
+      watch(kota, (newVal) => {
+        kota.value = newVal.replace(/\p{Extended_Pictographic}/gu, '');
+      });
+
       const displayRating = computed(() => hovered.value || rating.value);
       const ratingLabel   = computed(() => {
         const labels = { 5:'Luar Biasa!', 4:'Bagus', 3:'Cukup', 2:'Kurang', 1:'Buruk' };
@@ -100,7 +107,7 @@ function initListApp(mountSelector) {
         if (!rating.value) e.rating = 'Pilih rating bintang terlebih dahulu';
         
         if (!name.value.trim()) e.name = 'Nama lengkap wajib diisi';
-        else if (name.value.length < 3 || name.value.length > 15) e.name = 'Nama harus 3-15 karakter';
+        else if (name.value.length < 5 || name.value.length > 15) e.name = 'Nama harus 5-15 karakter';
 
         if (kota.value && kota.value.length > 20) e.kota = 'Asal kota maksimal 20 karakter';
 
@@ -346,7 +353,7 @@ function initListApp(mountSelector) {
                     <input
                       type="text" id="vue-name" v-model="name"
                       class="field-input" :class="{'is-invalid': errors.name}"
-                      placeholder="Masukkan nama (10-15 karakter)" maxlength="15"
+                      placeholder="Masukkan nama (5-15 karakter)" maxlength="15"
                     >
                     <div v-if="errors.name" style="color:#dc2626;font-size:.75rem;margin-top:.2rem">
                       <i class="fa-solid fa-circle-exclamation"></i> {{ errors.name }}

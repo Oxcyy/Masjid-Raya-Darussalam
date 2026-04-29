@@ -73,13 +73,15 @@
                     <input type="radio" id="t-star1" name="t_rating" value="1"><label for="t-star1" title="1 Bintang (Buruk)"><i class="fa-solid fa-star"></i></label>
                 </div>
                 <div id="t-rating-label" style="font-size:.78rem;color:var(--gray-400);margin-top:.25rem;min-height:1.2em;font-style:italic">Luar Biasa!</div>
+                <div id="t-rating-error" style="color:#dc2626;font-size:.75rem;margin-top:.2rem;display:none"><i class="fa-solid fa-circle-exclamation"></i> <span class="msg"></span></div>
                 </div>
 
                 <div style="margin-bottom:.85rem">
                 <label class="field-label" for="t-name">
                     <i class="fa-solid fa-user"></i> Nama Lengkap <span class="field-required">*</span>
                 </label>
-                <input type="text" id="t-name" class="field-input" placeholder="Masukkan nama (10-15 karakter)" maxlength="15" required>
+                <input type="text" id="t-name" class="field-input" placeholder="Masukkan nama (5-15 karakter)" maxlength="15" required>
+                <div id="t-name-error" style="color:#dc2626;font-size:.75rem;margin-top:.2rem;display:none"><i class="fa-solid fa-circle-exclamation"></i> <span class="msg"></span></div>
                 </div>
 
                 <div style="margin-bottom:.85rem">
@@ -87,16 +89,18 @@
                     <i class="fa-solid fa-location-dot"></i> Asal Kota
                 </label>
                 <input type="text" id="t-kota" class="field-input" placeholder="contoh: Samarinda (Opsional | Maks 20 Karakter)" maxlength="20">
+                <div id="t-kota-error" style="color:#dc2626;font-size:.75rem;margin-top:.2rem;display:none"><i class="fa-solid fa-circle-exclamation"></i> <span class="msg"></span></div>
                 </div>
 
                 <div style="margin-bottom:.85rem">
                 <label class="field-label" for="t-text">
                     <i class="fa-regular fa-comment-dots"></i> Ceritakan Pengalaman Anda <span class="field-required">*</span>
                 </label>
-                <textarea id="t-text" class="field-textarea" rows="4" placeholder="Ulasan Anda (10-500 karakter)" style="resize:vertical" maxlength="500s"></textarea>
+                <textarea id="t-text" class="field-textarea" rows="4" placeholder="Ulasan Anda (10-500 karakter)" style="resize:vertical" maxlength="500"></textarea>
                 <div id="t-text-count" style="font-size:.72rem;color:var(--gray-400);margin-top:.25rem;text-align:right">
                     0 / 500 karakter
                 </div>
+                <div id="t-text-error" style="color:#dc2626;font-size:.75rem;margin-top:.2rem;display:none"><i class="fa-solid fa-circle-exclamation"></i> <span class="msg"></span></div>
                 </div>
 
                 <div style="margin-bottom:1.1rem">
@@ -137,10 +141,24 @@
         </div>
     </div>
 
-    <div class="ku-pane" id="ku-tab-pending" role="tabpanel">
+<div class="ku-pane" id="ku-tab-pending" role="tabpanel">
         <div class="data-table-wrap">
-        <div class="data-table-head">
-            <h6><i class="fa-regular fa-clock" style="color:var(--gold-500)"></i> Ulasan Menunggu Persetujuan</h6>
+            <div class="data-table-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem;">
+            <h6 style="margin:0;"><i class="fa-regular fa-clock" style="color:var(--gold-500)"></i> Ulasan Menunggu Persetujuan</h6>
+            <div style="display:flex; gap:.5rem; align-items:center;">
+                <select id="filter-star-pending" class="filter-dropdown" onchange="window._ctrl.sortPending()">
+                    <option value="all">&#11088; Semua Ulasan</option>
+                    <option value="5">&#11088;&#11088;&#11088;&#11088;&#11088; (5)</option>
+                    <option value="4">&#11088;&#11088;&#11088;&#11088; (4)</option>
+                    <option value="3">&#11088;&#11088;&#11088; (3)</option>
+                    <option value="2">&#11088;&#11088; (2)</option>
+                    <option value="1">&#11088; (1)</option>
+                </select>
+                <select id="sort-pending" class="filter-dropdown" onchange="window._ctrl.sortPending()">
+                    <option value="newest">Terbaru</option>
+                    <option value="oldest">Terlama</option>
+                </select>
+            </div>
         </div>
         <div style="overflow-x:auto">
             <table class="data-table">
@@ -150,7 +168,7 @@
                 <th>Pengunjung</th>
                 <th>Rating</th>
                 <th>Ulasan</th>
-                <th>Foto</th>
+                <th style="text-align:center">Foto</th>
                 <th>Tanggal</th>
                 <th>Aksi</th>
                 </tr>
@@ -167,8 +185,22 @@
 
     <div class="ku-pane" id="ku-tab-semua" role="tabpanel">
         <div class="data-table-wrap">
-        <div class="data-table-head">
-            <h6><i class="fa-solid fa-list" style="color:var(--gold-500)"></i> Semua Ulasan</h6>
+        <div class="data-table-head" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.5rem;">
+            <h6 style="margin:0;"><i class="fa-solid fa-list" style="color:var(--gold-500)"></i> Semua Ulasan</h6>
+            <div style="display:flex; gap:.5rem; align-items:center;">
+                <select id="filter-star-all" class="filter-dropdown" onchange="window._ctrl.sortAll()">
+                    <option value="all">&#11088; Semua Ulasan</option>
+                    <option value="5">&#11088;&#11088;&#11088;&#11088;&#11088; (5)</option>
+                    <option value="4">&#11088;&#11088;&#11088;&#11088; (4)</option>
+                    <option value="3">&#11088;&#11088;&#11088; (3)</option>
+                    <option value="2">&#11088;&#11088; (2)</option>
+                    <option value="1">&#11088; (1)</option>
+                </select>
+                <select id="sort-all" class="filter-dropdown" onchange="window._ctrl.sortAll()">
+                    <option value="newest">Terbaru</option>
+                    <option value="oldest">Terlama</option>
+                </select>
+            </div>
         </div>
         <div style="overflow-x:auto">
             <table class="data-table">
@@ -178,13 +210,14 @@
                 <th>Pengunjung</th>
                 <th>Rating</th>
                 <th>Ulasan</th>
-                <th>Foto</th>
+                <th style="text-align:center">Foto</th>
+                <th>Tanggal</th>
                 <th>Status</th>
                 <th>Aksi</th>
                 </tr>
             </thead>
             <tbody id="all-tbody">
-                <tr><td colspan="7" class="text-center" style="padding:2rem;color:var(--gray-400)">
+                <tr><td colspan="8" class="text-center" style="padding:2rem;color:var(--gray-400)">
                 <i class="fa-solid fa-spinner fa-spin"></i> Memuat...
                 </td></tr>
             </tbody>

@@ -272,6 +272,7 @@ try {
         <a href="index.php" class="footer-link"><i class="fa-solid fa-house fa-fw"></i> Beranda</a>
         <a href="views/detail.php" class="footer-link"><i class="fa-solid fa-mosque fa-fw"></i> Detail &amp; Fasilitas</a>
         <a href="views/ulasan.php" class="footer-link"><i class="fa-regular fa-comment-dots fa-fw"></i> Ulasan</a>
+        <a href="views/login.php"   class="footer-link"><i class="fa-regular fa-user fa-fw"></i> Admin</a>
       </div>
       <div class="col-6 col-lg-3">
         <div class="footer-heading">Kontak</div>

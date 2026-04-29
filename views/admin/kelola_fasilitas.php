@@ -23,7 +23,7 @@ $activePage = 'fasilitas';
   <div class="admin-topbar">
     <div>
       <div class="topbar-title"><i class="fa-solid fa-building-columns" style="color:var(--gold-500)"></i> Kelola Fasilitas</div>
-      <div class="topbar-sub">Manajemen data fasilitas Masjid Raya Darussalam &mdash; <span id="stat-fac-count">-</span> fasilitas</div>
+      <div class="topbar-sub">Manajemen data fasilitas Masjid Raya Darussalam <span id="stat-fac-count">-</span> fasilitas</div>
     </div>
     <button class="act-btn act-approve" style="padding:.5rem 1rem;font-size:.82rem" onclick="window._ctrl.openNewFac()">
       <i class="fa-solid fa-plus"></i> Tambah Fasilitas

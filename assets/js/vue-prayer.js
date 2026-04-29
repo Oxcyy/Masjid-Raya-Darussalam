@@ -1,4 +1,4 @@
-const { createApp, ref, computed, onMounted, onUnmounted } = Vue;
+const { createApp, ref, computed, onMounted, onUnmounted} = Vue;
 
 const PRAYER_API    = 'https://api.aladhan.com/v1/timingsByCity';
 const PRAYER_PARAMS = 'city=Samarinda&country=Indonesia&method=20';
@@ -171,7 +171,7 @@ window.VuePrayerApp = function (mountSelector) {
               </template>
               <template v-else>
                 <i class="fa-solid fa-triangle-exclamation" style="color:rgba(255,255,255,.4)"></i>
-                Menggunakan jadwal offline &mdash; Samarinda, Kalimantan Timur
+                Menggunakan jadwal offline - Samarinda, Kalimantan Timur
               </template>
             </p>
           </div>
