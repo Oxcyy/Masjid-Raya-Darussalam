@@ -117,7 +117,7 @@ masjid/
 
 ---
 
-## Tampilan Halaman Admin
+### Tampilan Halaman Admin
 - Halaman Dashboard Admin
 <img width="1919" height="969" alt="Screenshot 2026-04-29 224909" src="https://github.com/user-attachments/assets/e6f508f1-a184-45e7-a8eb-9a1aac4bf27f" />
 
