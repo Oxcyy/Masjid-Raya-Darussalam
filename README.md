@@ -34,14 +34,15 @@ Website dibangun menggunakan **PHP native**, **MySQL** sebagai database, **Boots
 - **Jadwal Sholat** - Tampil real-time via API aladhan.com menggunakan Vue.js 3, lengkap dengan countdown waktu sholat berikutnya dan fallback data lokal Samarinda
 - **Detail & Fasilitas** - Profil lengkap masjid beserta daftar fasilitas dengan foto
 - **Galeri Foto** - Tampilan grid interaktif dengan lightbox
+- **Lokasi** - Menampilkan lokasi dari masjid raya darussalam dengan embed google maps
 - **Ulasan Jamaah** - Form kirim ulasan dengan rating bintang (1-5) dan filter ulasan reaktif
 - **Responsive Design** - Tampil optimal di semua ukuran layar
 
 ### Panel Admin
 - **Dashboard** - Statistik lengkap: total ulasan, rating, fasilitas, foto, dan video
-- **Moderasi Ulasan** - Approve, edit, dan hapus ulasan masuk
+- **Kelola Ulasan** - Approve, edit, dan hapus ulasan masuk
 - **Kelola Fasilitas** - CRUD data fasilitas lengkap dengan foto
-- **Kelola Galeri & Video** - Manajemen foto galeri dan embed YouTube dalam satu halaman
+- **Kelola Galeri & Video** - Manajemen foto galeri dan Video YouTube dalam satu halaman
 - **Floating Admin Bar** - Akses cepat ke dashboard saat melihat tampilan publik
 
 ---
