@@ -1,6 +1,6 @@
 # 🕌 Masjid Raya Darussalam - Website Wisata Religi
 
-Website profil dan wisata religi Masjid Raya Darussalam Samarinda, Kalimantan Timur. Dibangun sebagai Projek Akhir mata kuliah Pemrograman Aplikasi Bergerak.
+Website profil dan wisata religi Masjid Raya Darussalam Samarinda, Kalimantan Timur. Dibangun sebagai Projek Akhir mata kuliah Pemrograman Berbasis Web.
 
 ---
 
